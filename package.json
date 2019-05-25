@@ -1,0 +1,28 @@
+{
+  "fitbit": {
+    "appUUID": "5210159f-fb06-44f7-80f4-6df85b13de49",
+    "appType": "app",
+    "appDisplayName": "SCPM",
+    "iconFile": "resources/icon.png",
+    "wipeColor": "#3f51b5",
+    "requestedPermissions": [
+      "access_activity",
+      "access_heart_rate"
+    ],
+    "buildTargets": [
+      "higgs"
+    ],
+    "i18n": {
+      "en": {
+        "name": "SCPM"
+      },
+      "es": {
+        "name": "SCPM"
+      }
+    },
+    "defaultLanguage": "es-ES"
+  },
+  "devDependencies": {
+    "@fitbit/sdk": "~3.1.0"
+  }
+}
