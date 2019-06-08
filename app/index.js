@@ -1,22 +1,36 @@
-let document = require("document");
+import document from "document";
 import { HeartRateSensor } from "heart-rate";
+import * as messaging from "messaging";
 
-let hrLabel = document.getElementById("hrm");
-let updatedLabel = document.getElementById("updated");
+let ritmo = document.getElementById("ritmo");
+let label = document.getElementById("label");
 
-// Se inicializan las variables de el entorno del ususario
-hrLabel.text = "--";
-updatedLabel.text = "UDFJC";
+ritmo.text = "---";
+label.text = "UDFJC";
 
-// Se crea la instancia del objeto HeartRateSensor
-var hrm = new HeartRateSensor();
+var ritmoc = new HeartRateSensor();
 
-// Se declara el controlador de eventos 
-hrm.onreading = function() {
-  // Ver los valores del sensor
-  console.log("Frecuencia cardiaca actual: " + hrm.heartRate);
-  hrLabel.text = hrm.heartRate;
+ritmoc.onreading = function() {
+  ritmo.text = ritmoc.heartRate;
 }
 
-// Iniciar el monitor
-hrm.start();
+ritmoc.start();
+
+function enviarRc(ritmo) {
+  if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {    
+    messaging.peerSocket.send({
+      command: 'ritmo',
+      dato: ritmoc.heartRate
+    });
+  }
+}
+
+messaging.peerSocket.onopen = function() {  
+  enviarRc(ritmoc.heartRate);
+}
+
+messaging.peerSocket.onerror = function(err) {
+  console.log("Error de conexion: " + err.code + " - " + err.message);
+}
+
+setInterval(enviarRc, 1 * 1000 * 60);
